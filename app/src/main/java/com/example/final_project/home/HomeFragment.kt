@@ -5,9 +5,7 @@ import android.view.View
 import android.webkit.WebView
 import android.widget.Button
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.findViewTreeViewModelStoreOwner
 import com.example.final_project.R
-import com.example.final_project.databinding.FragmentHomeBinding
 
 class HomeFragment: Fragment(R.layout.fragment_home) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
