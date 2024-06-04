@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">final_project</string>
+    <string name="home_kr">산책</string>
+    <string name="chat_kr">메모장</string>
+    <string name="profile_kr">프로필</string>
+    <string name="startWalking_kr">산책하기</string>
+    <string name="save_kr">저장</string>
+</resources>
