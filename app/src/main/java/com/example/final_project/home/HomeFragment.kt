@@ -17,7 +17,6 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
         dailyWeather.loadUrl("https://www.accuweather.com/ko/kr/siheung/223647/hourly-weather-forecast/223647")
         walkingButton.setOnClickListener {
             //산책화면으로 넘어가기
-
         }
     }
 }
