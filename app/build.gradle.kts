@@ -1,3 +1,7 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
@@ -17,16 +21,26 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
     }
 
     buildTypes {
+        debug {
+            resValue("string","WEATHER_API_KEY",gradleLocalProperties(rootDir,providers).getProperty("WEATHER_API_KEY"))
+            buildConfigField("String","WEATHER_API_KEY", gradleLocalProperties(rootDir,providers).getProperty("WEATHER_API_KEY"))
+
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            resValue("string","WEATHER_API_KEY",gradleLocalProperties(rootDir,providers).getProperty("WEATHER_API_KEY"))
+            buildConfigField("String","WEATHER_API_KEY", gradleLocalProperties(rootDir,providers).getProperty("WEATHER_API_KEY"))
         }
+
+
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -34,6 +48,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+    buildFeatures {
+        viewBinding = true
     }
 }
 
