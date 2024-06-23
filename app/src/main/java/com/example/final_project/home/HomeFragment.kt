@@ -32,8 +32,7 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
         val cal = Calendar.getInstance()
         val timeH = SimpleDateFormat("HH", Locale.getDefault()).format(cal.time) // 현재 시각
         val timeM = SimpleDateFormat("mm", Locale.getDefault()).format(cal.time) // 현재 분
-
-
+        var tempText =""
         val base_time = getBaseTime(timeH, timeM)
         var base_date = crrDate(timeH, base_time)
 
@@ -49,8 +48,10 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
                 "3" -> weatherDescription.text = "눈"
                 "4" -> weatherDescription.text = "소나기"
             }
-            humidity.text = "습도 : "+it.response.body.items.item[1].obsrValue + "%"
-            temperature.text = "온도 : "+it.response.body.items.item[3].obsrValue
+            tempText = "습도 : "+it.response.body.items.item[1].obsrValue + "%"
+            humidity.text = tempText
+            tempText = "온도 : "+it.response.body.items.item[3].obsrValue
+            temperature.text = tempText
         })
         viewModel.fetchWeather(base_date,base_time,"55","127")
         val walkingButton = view.findViewById<Button>(R.id.startWalking)
