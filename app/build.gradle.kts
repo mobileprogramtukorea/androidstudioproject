@@ -28,6 +28,8 @@ android {
         debug {
             resValue("string","WEATHER_API_KEY",gradleLocalProperties(rootDir,providers).getProperty("WEATHER_API_KEY"))
             buildConfigField("String","WEATHER_API_KEY", gradleLocalProperties(rootDir,providers).getProperty("WEATHER_API_KEY"))
+            resValue("string","WEATHER_API_KEY2",gradleLocalProperties(rootDir,providers).getProperty("WEATHER_API_KEY2"))
+            buildConfigField("String","WEATHER_API_KEY2", gradleLocalProperties(rootDir,providers).getProperty("WEATHER_API_KEY2"))
 
         }
         release {
@@ -38,6 +40,8 @@ android {
             )
             resValue("string","WEATHER_API_KEY",gradleLocalProperties(rootDir,providers).getProperty("WEATHER_API_KEY"))
             buildConfigField("String","WEATHER_API_KEY", gradleLocalProperties(rootDir,providers).getProperty("WEATHER_API_KEY"))
+            resValue("string","WEATHER_API_KEY2",gradleLocalProperties(rootDir,providers).getProperty("WEATHER_API_KEY2"))
+            buildConfigField("String","WEATHER_API_KEY2", gradleLocalProperties(rootDir,providers).getProperty("WEATHER_API_KEY2"))
         }
 
 
@@ -56,8 +60,13 @@ android {
 
 dependencies {
     //날씨 API 통신 라이브러리
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.1")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1")
+    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.3.1")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
