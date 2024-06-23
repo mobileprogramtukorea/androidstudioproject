@@ -26,7 +26,7 @@
             android:textSize="30sp" />
 
         <TextView
-            android:id="@+id/distance"
+            android:id="@+id/distanceTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -35,7 +35,7 @@
             android:textSize="30sp" />
 
         <TextView
-            android:id="@+id/time"
+            android:id="@+id/timeTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -45,10 +45,37 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/pauseButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="300dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:text="산책 일시정지"
+        android:visibility="visible"
+        app:layout_constraintEnd_toStartOf="@id/resumeButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/statbar" />
+
+    <Button
+        android:id="@+id/resumeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="300dp"
+        android:text="산책 재개"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/pauseButton"
+        app:layout_constraintEnd_toStartOf="@id/stopButton"
+        app:layout_constraintTop_toBottomOf="@id/statbar" />
+
+    <Button
+        android:id="@+id/stopButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="300dp"
+        android:text="산책 종료"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/resumeButton"
+        app:layout_constraintTop_toBottomOf="@id/statbar" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

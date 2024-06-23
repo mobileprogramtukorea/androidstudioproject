@@ -1,5 +1,6 @@
 package com.example.final_project.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.example.final_project.R
+import com.example.final_project.WalkActivity
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -33,12 +35,16 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
         val timeH = SimpleDateFormat("HH", Locale.getDefault()).format(cal.time) // 현재 시각
         val timeM = SimpleDateFormat("mm", Locale.getDefault()).format(cal.time) // 현재 분
         var tempText =""
-        val base_time = getBaseTime(timeH, timeM)
+        var base_time = getBaseTime(timeH, timeM)
         var base_date = crrDate(timeH, base_time)
 
         val temperature = view.findViewById<TextView>(R.id.temperature)
         val weatherDescription = view.findViewById<TextView>(R.id.weatherDescription)
         val humidity = view.findViewById<TextView>(R.id.humidity)
+        val walkingButton = view.findViewById<Button>(R.id.startWalking)
+        val webView = view.findViewById<WebView>(R.id.petNews)
+        //뉴스정보 띄워주기
+        webView.loadUrl("https://www.pet-news.or.kr/")
         //날씨정보 띄워주기
         viewModel.weatherData.observe(viewLifecycleOwner, Observer{
             when(it.response.body.items.item[0].obsrValue){
@@ -50,16 +56,15 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
             }
             tempText = "습도 : "+it.response.body.items.item[1].obsrValue + "%"
             humidity.text = tempText
-            tempText = "온도 : "+it.response.body.items.item[3].obsrValue
+            tempText = "온도 : "+it.response.body.items.item[3].obsrValue + "℃"
             temperature.text = tempText
         })
-        viewModel.fetchWeather(base_date,base_time,"55","127")
-        val walkingButton = view.findViewById<Button>(R.id.startWalking)
-        val dailyWeather = view.findViewById<WebView>(R.id.dailyWeather)
+        viewModel.fetchWeather(base_date,base_time,"56","122")
 
-        val webView = view.findViewById<WebView>(R.id.petNews)
-        webView.loadUrl("https://www.pet-news.or.kr/")
-        dailyWeather.loadUrl("https://www.accuweather.com/ko/kr/siheung/223647/hourly-weather-forecast/223647")
+        walkingButton.setOnClickListener {
+            val intent = Intent(activity, WalkActivity::class.java)
+            startActivity(intent)
+        }
     }
     private fun crrDate(t: String, bt: String): String{
         val cal = Calendar.getInstance()

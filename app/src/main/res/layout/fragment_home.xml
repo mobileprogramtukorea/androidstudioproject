@@ -7,47 +7,42 @@
     android:background="#FFFFFF">
 
     <WebView
-        app:layout_constraintTop_toTopOf="parent"
         android:id="@+id/petNews"
         android:layout_width="match_parent"
-        android:layout_height="100dp"/>
-
-    <WebView
-        app:layout_constraintTop_toBottomOf="@+id/petNews"
-        android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:id="@+id/dailyWeather"/>
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
-        app:layout_constraintTop_toBottomOf="@+id/dailyWeather"
         android:id="@+id/weatherContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/petNews">
 
         <TextView
             android:id="@+id/weatherDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Weather Description"
-            android:textSize="18sp"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/temperature"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Temperature"
-            android:textSize="18sp"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/humidity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Humidity"
-            android:textSize="18sp"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
 
     </LinearLayout>
 
@@ -57,14 +52,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="200dp"
+        android:backgroundTint="@color/black"
+        android:text="@string/startWalking_kr"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dailyWeather"
-        android:text="@string/startWalking_kr"
-        android:backgroundTint="@color/black"/>
-
-
+        app:layout_constraintTop_toBottomOf="@+id/dailyWeather" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
