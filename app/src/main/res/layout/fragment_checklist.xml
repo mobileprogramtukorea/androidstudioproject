@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    tools:context=".ChecklistFragment">
+    tools:context=".checklist.ChecklistFragment">
 
     <TextView
         android:id="@+id/checklistTitle"
@@ -22,13 +22,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:fontFamily="@font/baloo_chettan" />
 
+    <Button
+        android:id="@+id/goToMakeChecklistButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Make Checklist"
+        app:fontFamily="@font/baloo_chettan"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#3B3225"
+        app:layout_constraintTop_toBottomOf="@id/checklistTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <LinearLayout
         android:id="@+id/checklistContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="16dp"
         android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/checklistTitle"
+        app:layout_constraintTop_toBottomOf="@id/goToMakeChecklistButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

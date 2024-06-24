@@ -1,60 +1,65 @@
 package com.example.final_project.checklist
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import androidx.fragment.app.Fragment
 import com.example.final_project.R
+import com.example.final_project.databinding.FragmentChecklistBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class ChecklistFragment : Fragment(R.layout.fragment_checklist) {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [CheckListFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class CheckListFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private var _binding: FragmentChecklistBinding? = null
+    private val binding get() = _binding!!
+    private var checklistItems: List<String>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_check_list, container, false)
+        _binding = FragmentChecklistBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        arguments?.getStringArrayList(ARG_CHECKLIST_ITEMS)?.let {
+            checklistItems = it
+        }
+        displayChecklistItems()
+        binding.goToMakeChecklistButton.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainer, MakeChecklistFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+    }
+
+    private fun displayChecklistItems() {
+        checklistItems?.forEach { item ->
+            val checklistItemView = LayoutInflater.from(context).inflate(R.layout.item_checklist, binding.checklistContainer, false)
+            val editText = checklistItemView.findViewById<EditText>(R.id.checklistItemEditText)
+            editText.setText(item)
+            binding.checklistContainer.addView(checklistItemView)
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment CheckListFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            CheckListFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+        private const val ARG_CHECKLIST_ITEMS = "checklist_items"
+
+        fun newInstance(checklistItems: List<String>): ChecklistFragment {
+            val fragment = ChecklistFragment()
+            val args = Bundle()
+            args.putStringArrayList(ARG_CHECKLIST_ITEMS, ArrayList(checklistItems))
+            fragment.arguments = args
+            return fragment
+        }
     }
 }
