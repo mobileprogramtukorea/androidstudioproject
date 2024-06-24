@@ -14,22 +14,22 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         val homeFragment = HomeFragment()
-        val checklistFragment = ChecklistFragment()
+        val checkListFragment = ChecklistFragment()
         val myPageFragment = MyPageFragment()
 
         replaceFragment(homeFragment)
         bottomNavigationView.selectedItemId = R.id.home
         bottomNavigationView.setOnNavigationItemSelectedListener {
-            when (it.itemId){
+            when (it.itemId) {
                 R.id.home -> replaceFragment(homeFragment)
-                R.id.checkList -> replaceFragment(checklistFragment)
+                R.id.checkList -> replaceFragment(checkListFragment)
                 R.id.myPage -> replaceFragment(myPageFragment)
             }
             true
         }
     }
 
-    private fun replaceFragment(fragment: Fragment){
+    private fun replaceFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .apply {
                 replace(R.id.fragmentContainer, fragment)

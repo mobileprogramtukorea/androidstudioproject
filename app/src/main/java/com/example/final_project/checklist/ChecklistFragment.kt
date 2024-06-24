@@ -29,6 +29,7 @@ class ChecklistFragment : Fragment(R.layout.fragment_checklist) {
             checklistItems = it
         }
         displayChecklistItems()
+
         binding.goToMakeChecklistButton.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragmentContainer, MakeChecklistFragment())

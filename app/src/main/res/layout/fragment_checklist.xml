@@ -9,30 +9,20 @@
 
     <TextView
         android:id="@+id/checklistTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Checklist"
-        android:textColor="#000000"
-        android:textSize="24sp"
-        android:background="@drawable/rounded_corner_background"
-        android:padding="8dp"
+        android:layout_width="292dp"
+        android:layout_height="59dp"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:fontFamily="@font/baloo_chettan" />
-
-    <Button
-        android:id="@+id/goToMakeChecklistButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Make Checklist"
-        app:fontFamily="@font/baloo_chettan"
+        android:background="@drawable/rounded_corner_background"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="Checklist"
         android:textColor="#FFFFFF"
-        android:backgroundTint="#3B3225"
-        app:layout_constraintTop_toBottomOf="@id/checklistTitle"
+        android:textSize="30sp"
+        app:fontFamily="@font/baloo_chettan"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="DuplicateIds" />
 
     <LinearLayout
         android:id="@+id/checklistContainer"
@@ -40,9 +30,22 @@
         android:layout_height="0dp"
         android:layout_margin="16dp"
         android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/goToMakeChecklistButton"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/goToMakeChecklistButton"
+        android:layout_width="229dp"
+        android:layout_height="110dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="#625440"
+        android:text="Make Checklist"
+        android:textColor="#FFFFFF"
+        android:textSize="30sp"
+        app:fontFamily="@font/baloo_chettan"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/checklistTitle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
