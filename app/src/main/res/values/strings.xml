@@ -8,6 +8,9 @@
     <string name="calorie">칼로리</string>
     <string name="distance">거리</string>
     <string name="time">시간</string>
+    <string name="pause_button_description">Pause walking</string>
+    <string name="resume_button_description">Resume walking</string>
+    <string name="stop_button_description">Stop walking</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
