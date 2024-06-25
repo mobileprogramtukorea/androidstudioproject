@@ -20,6 +20,7 @@ class MyPageFragment: Fragment(R.layout.fragment_mypage) {
         super.onCreate(savedInstanceState)
     }
 
+    /*
     private fun setAnimation(clicked: Boolean) {
         if(!clicked) {
             fabaddprofile.startAnimation(clockWise)
@@ -27,4 +28,5 @@ class MyPageFragment: Fragment(R.layout.fragment_mypage) {
             fabaddprofile.startAnimation(anticlockWise)
         }
     }
+    */
 }
