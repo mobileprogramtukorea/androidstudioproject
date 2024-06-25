@@ -1,91 +1,140 @@
 package com.example.final_project
 
-
+import android.Manifest
+import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.SystemClock
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import android.view.View
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.example.final_project.databinding.WalkingWithDogBinding
+import com.google.android.gms.location.*
+import kotlin.math.round
 
 class WalkActivity : AppCompatActivity() {
 
-    private lateinit var distanceTextView: TextView
-    private lateinit var timeTextView: TextView
-    private lateinit var pauseButton: Button
-    private lateinit var resumeButton: Button
-    private lateinit var stopButton: Button
-
+    private lateinit var binding: WalkingWithDogBinding
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var locationCallback: LocationCallback
+    private var lastLocation: Location? = null
+    private var totalDistance = 0.0
     private var isWalking = false
-    private var startTime: Long = 0
-    private var totalDistance = 0.0f
-    private var totalElapsedTime: Long = 0
+    private var isPaused = false
+    private var startTime = 0L
+    private var pauseTime = 0L
 
-    private val handler = Handler(Looper.getMainLooper())
-    private val updateRunnable = object : Runnable {
-        override fun run() {
-            if (isWalking) {
-                val elapsedTime = (System.currentTimeMillis() - startTime) / 1000
-                timeTextView.text = elapsedTime.toString()
-                // 여기서 실제 거리 측정 로직을 추가하세요.
-                distanceTextView.text = totalDistance.toString()
-                handler.postDelayed(this, 1000)
-            }
-        }
-    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.walking_with_dog)
-
-        distanceTextView = findViewById(R.id.distanceTextView)
-        timeTextView = findViewById(R.id.timeTextView)
-        pauseButton = findViewById(R.id.pauseButton)
-        resumeButton = findViewById(R.id.resumeButton)
-        stopButton = findViewById(R.id.stopButton)
-
-        pauseButton.setOnClickListener {
-            pauseWalking()
-            pauseButton.visibility = View.GONE
-            resumeButton.visibility = View.VISIBLE
-            stopButton.visibility = View.VISIBLE
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+                if (isWalking && !isPaused) {
+                    for (location in locationResult.locations) {
+                        binding.distanceTextView.text = "0 m"
+                        if (lastLocation != null) {
+                            val distance = lastLocation!!.distanceTo(location).toDouble()
+                            totalDistance += distance
+                            binding.distanceTextView.text = "${totalDistance.toInt()} m"
+                            binding.caloris.text = "${round(totalDistance*0.063)} Kcal"
+                        }
+                        lastLocation = location
+                    }
+                }
+            }
         }
+        binding = WalkingWithDogBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        resumeButton.setOnClickListener {
-            resumeWalking()
-            resumeButton.visibility = View.GONE
-            stopButton.visibility = View.GONE
-            pauseButton.visibility = View.VISIBLE
-        }
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        stopButton.setOnClickListener {
-            stopWalking()
-        }
         startWalking()
 
+        binding.pauseButton.setOnClickListener {
+            pauseWalking()
+            binding.pauseButton.visibility = View.GONE
+            binding.resumeButton.visibility = View.VISIBLE
+            binding.stopButton.visibility = View.VISIBLE
+        }
+        binding.resumeButton.setOnClickListener {
+            resumeWalking()
+            binding.pauseButton.visibility = View.VISIBLE
+            binding.resumeButton.visibility = View.GONE
+            binding.stopButton.visibility = View.GONE
+        }
+        binding.stopButton.setOnClickListener {
+            stopWalking()
+        }
+
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+            != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
+        }
     }
+
     private fun startWalking() {
-        isWalking = true
-        startTime = System.currentTimeMillis()
-        handler.post(updateRunnable)
+        if (!isWalking) {
+            isWalking = true
+            totalDistance = 0.0
+            lastLocation = null
+            startTime = SystemClock.elapsedRealtime()
+            binding.chronometer.base = startTime
+            binding.chronometer.start()
+            startLocationUpdates()
+        }
     }
 
     private fun pauseWalking() {
-        isWalking = false
-        totalElapsedTime += (System.currentTimeMillis() - startTime) / 1000
+        if (isWalking && !isPaused) {
+            pauseTime = SystemClock.elapsedRealtime()
+            binding.chronometer.stop()
+            isPaused = true
+            stopLocationUpdates()
+        }
     }
 
     private fun resumeWalking() {
-        isWalking = true
-        startTime = System.currentTimeMillis() - totalElapsedTime * 1000
-        handler.post(updateRunnable)
+        if (isWalking && isPaused) {
+            val elapsedPauseTime = SystemClock.elapsedRealtime() - pauseTime
+            binding.chronometer.base += elapsedPauseTime
+            binding.chronometer.start()
+            isPaused = false
+            startLocationUpdates()
+        }
     }
 
     private fun stopWalking() {
-        isWalking = false
-        handler.removeCallbacks(updateRunnable)
-        // 추가로 산책 종료 처리 로직을 여기에 작성하세요.
-        finish()
+        if (isWalking) {
+            binding.chronometer.stop()
+            isWalking = false
+            isPaused = false
+            stopLocationUpdates()
+            Toast.makeText(this, "최종거리: ${totalDistance.toInt()} m", Toast.LENGTH_LONG).show()
+            finish()
+        }
     }
 
+    private fun startLocationUpdates() {
+        val locationRequest = LocationRequest.Builder(
+            Priority.PRIORITY_HIGH_ACCURACY, 5000
+        ).apply {
+            setMinUpdateIntervalMillis(2000)
+            setMaxUpdateDelayMillis(10000)
+        }.build()
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return
+        }
+        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null)
+    }
+
+    private fun stopLocationUpdates() {
+        fusedLocationClient.removeLocationUpdates(locationCallback)
+    }
 }
