@@ -35,7 +35,7 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
         val cal = Calendar.getInstance()
         val timeH = SimpleDateFormat("HH", Locale.getDefault()).format(cal.time) // 현재 시각
         val timeM = SimpleDateFormat("mm", Locale.getDefault()).format(cal.time) // 현재 분
-        var tempText =""
+        var tempText :String
         var base_time = getBaseTime(timeH, timeM)
         var base_date = crrDate(timeH, base_time)
 

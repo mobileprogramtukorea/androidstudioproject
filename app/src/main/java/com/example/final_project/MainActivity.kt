@@ -2,10 +2,7 @@ package com.example.final_project
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.example.final_project.checklist.CheckListFragment
 import com.example.final_project.home.HomeFragment

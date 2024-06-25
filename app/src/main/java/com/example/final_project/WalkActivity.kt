@@ -5,11 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.os.SystemClock
-import android.widget.Button
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import android.widget.Toast
@@ -18,7 +14,6 @@ import androidx.core.content.ContextCompat
 import com.example.final_project.databinding.WalkingWithDogBinding
 import com.google.android.gms.location.*
 import kotlin.math.round
-import kotlin.properties.Delegates
 
 class WalkActivity : AppCompatActivity() {
 
