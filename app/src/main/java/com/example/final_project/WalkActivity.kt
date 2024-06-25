@@ -1,16 +1,19 @@
 package com.example.final_project
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
-import android.widget.Button
+import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -20,121 +23,144 @@ import kotlin.math.round
 
 class WalkActivity : AppCompatActivity() {
 
+    private lateinit var distanceTextView: TextView
+    private lateinit var timeTextView: TextView
+    private lateinit var stopButton: ImageButton
+    private lateinit var restartButton: ImageButton
+    private lateinit var finishButton: ImageButton
+    private lateinit var stopButtonText: TextView
+    private lateinit var restartButtonText: TextView
+    private lateinit var finishButtonText: TextView
+    private lateinit var animatedImageView: ImageView
     private lateinit var binding: WalkingWithDogBinding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationCallback: LocationCallback
-    private var lastLocation: Location? = null
-    private var totalDistance = 0.0
+
     private var isWalking = false
-    private var isPaused = false
-    private var startTime = 0L
-    private var pauseTime = 0L
+    private var startTime: Long = 0
+    private var totalDistance = 0.0f
+    private var totalElapsedTime: Long = 0
+
+    private val handler = Handler(Looper.getMainLooper())
+    private val updateRunnable = object : Runnable {
+        override fun run() {
+            if (isWalking) {
+                val elapsedTime = (System.currentTimeMillis() - startTime) / 1000
+                timeTextView.text = elapsedTime.toString()
+                // 여기서 실제 거리 측정 로직을 추가하세요.
+                distanceTextView.text = totalDistance.toString()
+                handler.postDelayed(this, 1000)
+            }
+        }
+    }
+
+    private val imageSwitcherRunnable = object : Runnable {
+        private var imageIndex = 0
+        private val images = intArrayOf(R.drawable.walking1, R.drawable.walking2)
+
+        override fun run() {
+            if (isWalking) {
+                animatedImageView.setImageResource(images[imageIndex])
+                imageIndex = (imageIndex + 1) % images.size
+                handler.postDelayed(this, 500)
+            }
+        }
+    }
+
+    private val imagePauseSwitcherRunnable = object : Runnable {
+        private var imageIndex = 0
+        private val images = intArrayOf(R.drawable.walk2, R.drawable.walk3)
+
+        override fun run() {
+            if (!isWalking) {
+                animatedImageView.setImageResource(images[imageIndex])
+                imageIndex = (imageIndex + 1) % images.size
+                handler.postDelayed(this, 500)
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult) {
-                if (isWalking && !isPaused) {
-                    for (location in locationResult.locations) {
-                        binding.distanceTextView.text = "0 m"
-                        if (lastLocation != null) {
-                            val distance = lastLocation!!.distanceTo(location).toDouble()
-                            totalDistance += distance
-                            binding.distanceTextView.text = "${totalDistance.toInt()} m"
-                            binding.caloris.text = "${round(totalDistance*0.063)} Kcal"
-                        }
-                        lastLocation = location
-                    }
-                }
-            }
-        }
-        binding = WalkingWithDogBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(R.layout.walking_with_dog)
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        distanceTextView = findViewById(R.id.distanceTextView)
+        timeTextView = findViewById(R.id.timeTextView)
+        stopButton = findViewById(R.id.stopButton)
+        restartButton = findViewById(R.id.restartButton)
+        finishButton = findViewById(R.id.finishButton)
+        stopButtonText = findViewById(R.id.stopButtonText)
+        restartButtonText = findViewById(R.id.restartButtonText)
+        finishButtonText = findViewById(R.id.finishButtonText)
+        animatedImageView = findViewById(R.id.animatedImageView)
+
+        stopButton.setOnClickListener {
+            pauseWalking()
+            stopButton.visibility = View.GONE
+            stopButtonText.visibility = View.GONE
+            restartButton.visibility = View.VISIBLE
+            restartButtonText.visibility = View.VISIBLE
+            finishButton.visibility = View.VISIBLE
+            finishButtonText.visibility = View.VISIBLE
+            handler.post(imagePauseSwitcherRunnable)
+        }
+
+        restartButton.setOnClickListener {
+            resumeWalking()
+            restartButton.visibility = View.GONE
+            restartButtonText.visibility = View.GONE
+            finishButton.visibility = View.GONE
+            finishButtonText.visibility = View.GONE
+            stopButton.visibility = View.VISIBLE
+            stopButtonText.visibility = View.VISIBLE
+            handler.post(imageSwitcherRunnable)
+        }
+
+        finishButton.setOnClickListener {
+            stopWalking()
+            restartButton.visibility = View.GONE
+            restartButtonText.visibility = View.GONE
+            finishButton.visibility = View.GONE
+            finishButtonText.visibility = View.GONE
+            stopButton.visibility = View.VISIBLE
+            stopButtonText.visibility = View.VISIBLE
+        }
 
         startWalking()
-
-        binding.pauseButton.setOnClickListener {
-            pauseWalking()
-            binding.pauseButton.visibility = View.GONE
-            binding.resumeButton.visibility = View.VISIBLE
-            binding.stopButton.visibility = View.VISIBLE
-        }
-        binding.resumeButton.setOnClickListener {
-            resumeWalking()
-            binding.pauseButton.visibility = View.VISIBLE
-            binding.resumeButton.visibility = View.GONE
-            binding.stopButton.visibility = View.GONE
-        }
-        binding.stopButton.setOnClickListener {
-            stopWalking()
-        }
-
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-            != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
-        }
     }
 
     private fun startWalking() {
-        if (!isWalking) {
-            isWalking = true
-            totalDistance = 0.0
-            lastLocation = null
-            startTime = SystemClock.elapsedRealtime()
-            binding.chronometer.base = startTime
-            binding.chronometer.start()
-            startLocationUpdates()
-        }
+        isWalking = true
+        startTime = System.currentTimeMillis()
+        handler.post(updateRunnable)
+        handler.post(imageSwitcherRunnable)
     }
 
     private fun pauseWalking() {
-        if (isWalking && !isPaused) {
-            pauseTime = SystemClock.elapsedRealtime()
-            binding.chronometer.stop()
-            isPaused = true
-            stopLocationUpdates()
-        }
+        isWalking = false
+        totalElapsedTime += (System.currentTimeMillis() - startTime) / 1000
+        handler.removeCallbacks(imageSwitcherRunnable)
     }
 
     private fun resumeWalking() {
-        if (isWalking && isPaused) {
-            val elapsedPauseTime = SystemClock.elapsedRealtime() - pauseTime
-            binding.chronometer.base += elapsedPauseTime
-            binding.chronometer.start()
-            isPaused = false
-            startLocationUpdates()
-        }
+        isWalking = true
+        startTime = System.currentTimeMillis() - totalElapsedTime * 1000
+        handler.post(updateRunnable)
+        handler.post(imageSwitcherRunnable)
     }
 
     private fun stopWalking() {
-        if (isWalking) {
-            binding.chronometer.stop()
-            isWalking = false
-            isPaused = false
-            stopLocationUpdates()
-            Toast.makeText(this, "최종거리: ${totalDistance.toInt()} m", Toast.LENGTH_LONG).show()
-            finish()
-        }
+        isWalking = false
+        handler.removeCallbacks(updateRunnable)
+        handler.removeCallbacks(imageSwitcherRunnable)
+        handler.removeCallbacks(imagePauseSwitcherRunnable)
+        Toast.makeText(this, "최종거리: ${totalDistance.toInt()} m", Toast.LENGTH_LONG).show()
+        finish()
     }
 
-    private fun startLocationUpdates() {
-        val locationRequest = LocationRequest.Builder(
-            Priority.PRIORITY_HIGH_ACCURACY, 5000
-        ).apply {
-            setMinUpdateIntervalMillis(2000)
-            setMaxUpdateDelayMillis(10000)
-        }.build()
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return
-        }
-        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null)
-    }
-
-    private fun stopLocationUpdates() {
-        fusedLocationClient.removeLocationUpdates(locationCallback)
+    fun callPolice(view: View) {
+        val intent = Intent(Intent.ACTION_DIAL)
+        intent.data = Uri.parse("tel:112")
+        startActivity(intent)
     }
 }

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center_vertical">
@@ -17,65 +19,152 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/caloris"
+            android:id="@+id/timeTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/calorie"
+            android:text="time"
             android:textAlignment="center"
-            android:textSize="30sp" />
+            android:textSize="30sp"
+            app:fontFamily="@font/baloo_chettan" />
 
         <TextView
             android:id="@+id/distanceTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/distance"
+            android:text="distance"
             android:textAlignment="center"
-            android:textSize="30sp" />
+            android:textSize="30sp"
+            app:fontFamily="@font/baloo_chettan" />
 
-        <Chronometer
-            android:id="@+id/chronometer"
+        <TextView
+            android:id="@+id/calorie"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/time"
+            android:text="calorie"
             android:textAlignment="center"
-            android:textSize="30sp" />
+            android:textSize="30sp"
+            app:fontFamily="@font/baloo_chettan" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/pauseButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="300dp"
-        android:text="산책 일시정지"
-        android:visibility="visible"
-        app:layout_constraintEnd_toStartOf="@id/resumeButton"
+    <ImageView
+        android:id="@+id/animatedImageView"
+        android:layout_width="290dp"
+        android:layout_height="480dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/walking1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.578"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/statbar" />
+        app:layout_constraintTop_toBottomOf="@id/statbar"
+        app:layout_constraintVertical_bias="0.256" />
 
-    <Button
-        android:id="@+id/resumeButton"
+    <ImageView
+        android:id="@+id/policeImageView"
+        android:layout_width="107dp"
+        android:layout_height="103dp"
+        android:layout_marginEnd="40dp"
+        android:contentDescription="police image"
+        android:onClick="callPolice"
+        android:src="@drawable/police"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/animatedImageView" />
+
+    <TextView
+        android:id="@+id/policeNumberTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="300dp"
-        android:text="산책 재개"
-        android:visibility="gone"
-        app:layout_constraintStart_toEndOf="@id/pauseButton"
-        app:layout_constraintEnd_toStartOf="@id/stopButton"
-        app:layout_constraintTop_toBottomOf="@id/statbar" />
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="32dp"
+        android:text="112"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="24sp"
+        app:fontFamily="@font/baloo_chettan"
+        app:layout_constraintEnd_toEndOf="@id/policeImageView"
+        app:layout_constraintTop_toBottomOf="@+id/policeImageView" />
 
-    <Button
+    <ImageButton
         android:id="@+id/stopButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/stop_button"
+        android:contentDescription="@string/stop_button_description"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/animatedImageView" />
+
+    <TextView
+        android:id="@+id/stopButtonText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="300dp"
-        android:text="산책 종료"
+        android:layout_marginTop="8dp"
+        android:text="stop"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        app:fontFamily="@font/baloo_chettan"
+        app:layout_constraintTop_toBottomOf="@id/stopButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageButton
+        android:id="@+id/restartButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/restart_button"
+        android:contentDescription="@string/restart_button_description"
+        android:visibility="gone"
+        app:layout_constraintEnd_toStartOf="@id/finishButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/stopButton" />
+
+    <TextView
+        android:id="@+id/restartButtonText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="restart"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        app:fontFamily="@font/baloo_chettan"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/restartButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/finishButton" />
+
+    <ImageButton
+        android:id="@+id/finishButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/stop_button"
+        android:contentDescription="@string/finish_button_description"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/resumeButton"
-        app:layout_constraintTop_toBottomOf="@id/statbar" />
+        app:layout_constraintStart_toEndOf="@id/restartButton"
+        app:layout_constraintTop_toBottomOf="@id/stopButton" />
 
+    <TextView
+        android:id="@+id/finishButtonText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="finish"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        app:fontFamily="@font/baloo_chettan"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/finishButton"
+        app:layout_constraintStart_toEndOf="@id/restartButton"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

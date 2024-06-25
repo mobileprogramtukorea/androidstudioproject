@@ -5,4 +5,6 @@
     <color name="gray_cc">#cccccccc</color>
     <color name="blue">#214a96</color>
     <color name="brightblue">#166eba</color>
+    <color name="bottom_nav_background">#FFFFFF</color>
+    <color name="bottom_nav_divider_color">#DAD7D7</color>
 </resources>
