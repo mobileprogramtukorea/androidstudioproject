@@ -60,6 +60,7 @@ class WalkActivity : AppCompatActivity() {
             binding.resumeButton.visibility = View.VISIBLE
             binding.stopButton.visibility = View.VISIBLE
         }
+        //text
         binding.resumeButton.setOnClickListener {
             resumeWalking()
             binding.pauseButton.visibility = View.VISIBLE
