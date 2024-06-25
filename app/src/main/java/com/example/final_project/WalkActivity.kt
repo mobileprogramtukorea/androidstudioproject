@@ -38,8 +38,10 @@ class WalkActivity : AppCompatActivity() {
 
     private var isWalking = false
     private var startTime: Long = 0
-    private var totalDistance = 0.0f
+    private var totalDistance = 0.0
     private var totalElapsedTime: Long = 0
+    private var isPaused = false
+    private var lastLocation: Location? = null
 
     private val handler = Handler(Looper.getMainLooper())
     private val updateRunnable = object : Runnable {
@@ -94,6 +96,23 @@ class WalkActivity : AppCompatActivity() {
         finishButtonText = findViewById(R.id.finishButtonText)
         animatedImageView = findViewById(R.id.animatedImageView)
 
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+                if (isWalking && !isPaused) {
+                    for (location in locationResult.locations) {
+                        binding.distanceTextView.text = "0 m"
+                        if (lastLocation != null) {
+                            val distance = lastLocation!!.distanceTo(location).toDouble()
+                            totalDistance += distance
+                            binding.distanceTextView.text = "${totalDistance} m"
+                            binding.calorie.text = "${round(totalDistance*0.063)} Kcal"
+                        }
+                        lastLocation = location
+                    }
+                }
+            }
+        }
+
         stopButton.setOnClickListener {
             pauseWalking()
             stopButton.visibility = View.GONE
@@ -140,6 +159,7 @@ class WalkActivity : AppCompatActivity() {
         isWalking = false
         totalElapsedTime += (System.currentTimeMillis() - startTime) / 1000
         handler.removeCallbacks(imageSwitcherRunnable)
+
     }
 
     private fun resumeWalking() {
