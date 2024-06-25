@@ -15,12 +15,12 @@ class WalkActivity : AppCompatActivity() {
 
     private lateinit var distanceTextView: TextView
     private lateinit var timeTextView: TextView
-    private lateinit var pauseButton: ImageButton
-    private lateinit var resumeButton: ImageButton
     private lateinit var stopButton: ImageButton
-    private lateinit var pauseButtonText: TextView
+    private lateinit var restartButton: ImageButton
+    private lateinit var finishButton: ImageButton
     private lateinit var stopButtonText: TextView
-    private lateinit var resumeButtonText: TextView
+    private lateinit var restartButtonText: TextView
+    private lateinit var finishButtonText: TextView
     private lateinit var animatedImageView: ImageView
 
     private var isWalking = false
@@ -56,7 +56,7 @@ class WalkActivity : AppCompatActivity() {
 
     private val imagePauseSwitcherRunnable = object : Runnable {
         private var imageIndex = 0
-        private val images = intArrayOf(R.drawable.walking1, R.drawable.walking2)
+        private val images = intArrayOf(R.drawable.walk2, R.drawable.walk3)
 
         override fun run() {
             if (!isWalking) {
@@ -73,41 +73,46 @@ class WalkActivity : AppCompatActivity() {
 
         distanceTextView = findViewById(R.id.distanceTextView)
         timeTextView = findViewById(R.id.timeTextView)
-        pauseButton = findViewById(R.id.pauseButton)
-        resumeButton = findViewById(R.id.resumeButton)
         stopButton = findViewById(R.id.stopButton)
-        pauseButtonText = findViewById(R.id.pauseButtonText)
-        resumeButtonText = findViewById(R.id.resumeButtonText)
+        restartButton = findViewById(R.id.restartButton)
+        finishButton = findViewById(R.id.finishButton)
         stopButtonText = findViewById(R.id.stopButtonText)
+        restartButtonText = findViewById(R.id.restartButtonText)
+        finishButtonText = findViewById(R.id.finishButtonText)
         animatedImageView = findViewById(R.id.animatedImageView)
 
-        pauseButton.setOnClickListener {
+        stopButton.setOnClickListener {
             pauseWalking()
-            pauseButton.visibility = View.GONE
-            pauseButtonText.visibility = View.GONE
-            resumeButton.visibility = View.VISIBLE
-            resumeButtonText.visibility = View.VISIBLE
-            stopButton.visibility = View.VISIBLE
-            stopButtonText.visibility = View.VISIBLE
+            stopButton.visibility = View.GONE
+            stopButtonText.visibility = View.GONE
+            restartButton.visibility = View.VISIBLE
+            restartButtonText.visibility = View.VISIBLE
+            finishButton.visibility = View.VISIBLE
+            finishButtonText.visibility = View.VISIBLE
             handler.post(imagePauseSwitcherRunnable)
         }
 
-        resumeButton.setOnClickListener {
+        restartButton.setOnClickListener {
             resumeWalking()
-            resumeButton.visibility = View.GONE
-            resumeButtonText.visibility = View.GONE
-            stopButton.visibility = View.GONE
-            stopButtonText.visibility = View.GONE
-            pauseButton.visibility = View.VISIBLE
-            pauseButtonText.visibility = View.VISIBLE
+            restartButton.visibility = View.GONE
+            restartButtonText.visibility = View.GONE
+            finishButton.visibility = View.GONE
+            finishButtonText.visibility = View.GONE
+            stopButton.visibility = View.VISIBLE
+            stopButtonText.visibility = View.VISIBLE
             handler.post(imageSwitcherRunnable)
         }
 
-        stopButton.setOnClickListener {
+        finishButton.setOnClickListener {
             stopWalking()
+            restartButton.visibility = View.GONE
+            restartButtonText.visibility = View.GONE
+            finishButton.visibility = View.GONE
+            finishButtonText.visibility = View.GONE
+            stopButton.visibility = View.VISIBLE
+            stopButtonText.visibility = View.VISIBLE
         }
 
-        findViewById<View>(R.id.pauseLayout).visibility = View.GONE
         startWalking()
     }
 

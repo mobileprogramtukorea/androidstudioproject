@@ -51,13 +51,16 @@
 
     <ImageView
         android:id="@+id/animatedImageView"
-        android:layout_width="409dp"
-        android:layout_height="516dp"
+        android:layout_width="300dp"
+        android:layout_height="400dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:scaleType="centerInside"
         android:src="@drawable/walking1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/statbar" />
 
     <ImageView
@@ -85,20 +88,20 @@
         app:layout_constraintTop_toBottomOf="@+id/policeImageView" />
 
     <ImageButton
-        android:id="@+id/pauseButton"
+        android:id="@+id/stopButton"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginTop="4dp"
-        android:background="@drawable/pause_button"
-        android:contentDescription="@string/pause_button_description"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/stop_button"
+        android:contentDescription="@string/stop_button_description"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/animatedImageView" />
 
     <TextView
-        android:id="@+id/pauseButtonText"
+        android:id="@+id/stopButtonText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -106,61 +109,60 @@
         android:textColor="#000000"
         android:textSize="20sp"
         app:fontFamily="@font/baloo_chettan"
-        app:layout_constraintTop_toBottomOf="@id/pauseButton"
+        app:layout_constraintTop_toBottomOf="@id/stopButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/pauseLayout"
+    <ImageButton
+        android:id="@+id/restartButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/restart_button"
+        android:contentDescription="@string/restart_button_description"
+        android:visibility="gone"
+        app:layout_constraintEnd_toStartOf="@id/finishButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/stopButton" />
+
+    <TextView
+        android:id="@+id/restartButtonText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="8dp"
+        android:text="restart"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        app:fontFamily="@font/baloo_chettan"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/animatedImageView"
+        app:layout_constraintTop_toBottomOf="@id/restartButton"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/finishButton" />
+
+    <ImageButton
+        android:id="@+id/finishButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/stop_button"
+        android:contentDescription="@string/finish_button_description"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
-        android:orientation="horizontal">
+        app:layout_constraintStart_toEndOf="@id/restartButton"
+        app:layout_constraintTop_toBottomOf="@id/stopButton" />
 
-        <ImageButton
-            android:id="@+id/resumeButton"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/restart_button"
-            android:contentDescription="@string/resume_button_description"
-            android:text="" />
+    <TextView
+        android:id="@+id/finishButtonText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="finish"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        app:fontFamily="@font/baloo_chettan"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/finishButton"
+        app:layout_constraintStart_toEndOf="@id/restartButton"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-        <TextView
-            android:id="@+id/resumeButtonText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="restart"
-            android:textColor="#000000"
-            android:textSize="20sp"
-            app:fontFamily="@font/baloo_chettan"
-            app:layout_constraintTop_toBottomOf="@id/resumeButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-        <ImageButton
-            android:id="@+id/stopButton"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/pause_button"
-            android:contentDescription="@string/stop_button_description"
-            android:text="" />
-
-        <TextView
-            android:id="@+id/stopButtonText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="finish"
-            android:textColor="#000000"
-            android:textSize="20sp"
-            app:fontFamily="@font/baloo_chettan"
-            app:layout_constraintTop_toBottomOf="@id/stopButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
