@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
+import android.net.Uri
 import android.os.Bundle
 import android.os.SystemClock
 import androidx.appcompat.app.AppCompatActivity
@@ -71,6 +72,11 @@ class WalkActivity : AppCompatActivity() {
             resultIntent.putExtra("resultData", resultData)
             setResult(RESULT_OK,resultIntent)
             stopWalking()
+        }
+        binding.buttonCall112.setOnClickListener {
+            val callIntent = Intent(Intent.ACTION_DIAL)
+            callIntent.data = Uri.parse("tel:112")
+            startActivity(callIntent)
         }
 
 
