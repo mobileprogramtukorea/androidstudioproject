@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.example.final_project.MainActivity
 import com.example.final_project.R
 import com.example.final_project.WalkActivity
 import java.text.SimpleDateFormat
@@ -63,7 +64,7 @@ class HomeFragment: Fragment(R.layout.fragment_home) {
 
         walkingButton.setOnClickListener {
             val intent = Intent(activity, WalkActivity::class.java)
-            startActivity(intent)
+            activity?.startActivityForResult(intent,MainActivity.REQUEST_CODE_WALK)
         }
     }
     private fun crrDate(t: String, bt: String): String{

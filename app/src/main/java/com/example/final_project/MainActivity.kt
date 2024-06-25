@@ -1,5 +1,6 @@
 package com.example.final_project
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +14,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
     //test
+    companion object {
+        const val REQUEST_CODE_WALK = 1
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -30,6 +34,17 @@ class MainActivity : AppCompatActivity() {
                 R.id.myPage ->replaceFragment(myPageFragment)
             }
             true
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_WALK && resultCode == RESULT_OK) {
+            val resultData = data?.getStringExtra("resultData")
+            if (resultData != null) {
+                val userFragment = supportFragmentManager.findFragmentByTag("MyPageFragment") as? MyPageFragment
+                userFragment?.updateData(resultData)
+            }
         }
     }
     private fun replaceFragment(fragment: Fragment){

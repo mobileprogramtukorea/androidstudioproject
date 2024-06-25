@@ -1,6 +1,7 @@
 package com.example.final_project
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
@@ -17,6 +18,7 @@ import androidx.core.content.ContextCompat
 import com.example.final_project.databinding.WalkingWithDogBinding
 import com.google.android.gms.location.*
 import kotlin.math.round
+import kotlin.properties.Delegates
 
 class WalkActivity : AppCompatActivity() {
 
@@ -30,6 +32,7 @@ class WalkActivity : AppCompatActivity() {
     private var startTime = 0L
     private var pauseTime = 0L
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         locationCallback = object : LocationCallback() {
@@ -40,7 +43,7 @@ class WalkActivity : AppCompatActivity() {
                         if (lastLocation != null) {
                             val distance = lastLocation!!.distanceTo(location).toDouble()
                             totalDistance += distance
-                            binding.distanceTextView.text = "${totalDistance.toInt()} m"
+                            binding.distanceTextView.text = "${totalDistance} m"
                             binding.caloris.text = "${round(totalDistance*0.063)} Kcal"
                         }
                         lastLocation = location
@@ -68,6 +71,10 @@ class WalkActivity : AppCompatActivity() {
             binding.stopButton.visibility = View.GONE
         }
         binding.stopButton.setOnClickListener {
+            val resultData = totalDistance*totalDistance*0.063/binding.chronometer.base
+            val resultIntent = Intent()
+            resultIntent.putExtra("resultData", resultData)
+            setResult(RESULT_OK,resultIntent)
             stopWalking()
         }
 
